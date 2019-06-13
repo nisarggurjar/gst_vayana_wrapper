@@ -1,5 +1,9 @@
 import uuid
 from datetime import datetime
+from base64 import b64encode, b64decode
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5 as PKCS1_v1_52
 
 
 class VayanaToken(object):
@@ -15,6 +19,15 @@ class VayanaToken(object):
         self.action = action
         self.txn_id = uuid.uuid4().hex
         self.timestamp = datetime.today().strftime('%Y%m%d%H%M%S') + "+0530"
+
+    def generate_signature(self, gst_private_key):
+
+        rsa_key = RSA.importKey(gst_private_key)
+        signer = PKCS1_v1_52.new(rsa_key)
+        digest = SHA256.new()
+        digest.update(b64decode(self.__str__()))
+        sign = signer.sign(digest)
+        return b64encode(sign)
 
     def __str__(self):
 
