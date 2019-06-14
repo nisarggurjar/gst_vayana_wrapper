@@ -1,4 +1,4 @@
-class StateCodeFactory(object):
+class StateCodeUtil(object):
 
     STATE_CODE_DATA = {
         'jammu_&_kashmir': '01',
