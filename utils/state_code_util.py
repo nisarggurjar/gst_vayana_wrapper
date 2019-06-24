@@ -42,4 +42,4 @@ class StateCodeUtil(object):
 
     @staticmethod
     def get_state_code(state_str):
-        return StateCodeFactory.STATE_CODE_DATA[state_str]
+        return StateCodeUtil.STATE_CODE_DATA[state_str]

@@ -1,0 +1,2 @@
+production privatekey doesn't match with vayana
+client-id and client-secret are needed

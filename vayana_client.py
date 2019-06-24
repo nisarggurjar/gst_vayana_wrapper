@@ -4,7 +4,16 @@ from vayana_modules.health import Health
 
 class VayanaClient(object):
 
-    def __init__(self, gstin, gst_cust_id, gst_client_id, gst_private_key, gst_public_key, **kwargs):
+    def __init__(
+        self,
+        gstin,
+        gst_cust_id,
+        gst_client_id,
+        gst_client_secret,
+        gsp_private_key,
+        gst_public_key,
+        **kwargs
+    ):
 
         self.debug = True
         try:
@@ -16,7 +25,8 @@ class VayanaClient(object):
             gstin,
             gst_cust_id,
             gst_client_id,
-            gst_private_key,
+            gst_client_secret,
+            gsp_private_key,
             gst_public_key,
             debug=self.debug
         )
