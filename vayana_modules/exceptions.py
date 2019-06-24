@@ -1,0 +1,2 @@
+class VayanaAuthException(Exception):
+    pass
