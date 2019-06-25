@@ -17,9 +17,10 @@ class AppKeyFactory(object):
 
         self.GST_PUBLIC_KEY = gst_public_key
 
-    def get_app_key(self):
+    def get_app_key(self, app_key=None):
 
-        app_key = uuid.uuid4().hex
+        if not app_key:
+            app_key = uuid.uuid4().hex
         r_gst_public_key = RSA.importKey(self.GST_PUBLIC_KEY)
         cipher = PKCS1_v1_5_encrypt.new(r_gst_public_key)
         encrypted_app_key = cipher.encrypt(app_key)
