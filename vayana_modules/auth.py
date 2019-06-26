@@ -39,6 +39,16 @@ class Auth(object):
             gsp_private_key
         )
 
+    def reset_auth_params(self):
+        '''
+        reset auth params
+        '''
+
+        self.__app_key = None
+        self.__authtoken = None
+        self.__sek = None
+        self.__username = None
+
     def preload_auth_params(self, username, app_key, authtoken, sek):
         '''
         app_key object
@@ -55,6 +65,8 @@ class Auth(object):
         self.__username = username
 
     def request_otp(self, username):
+        self.reset_auth_params()
+
         app_key_factory = AppKeyFactory(self.GST_PUBLIC_KEY)
         app_key = app_key_factory.get_app_key()
 
