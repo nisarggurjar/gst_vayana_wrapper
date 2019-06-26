@@ -7,6 +7,7 @@ from factories.app_key_factory import AppKeyFactory
 from factories.url_factory import GSTURLFactory
 
 from exceptions import VayanaAuthException
+from requests.exceptions import ReadTimeout
 
 
 class Auth(object):
@@ -77,11 +78,14 @@ class Auth(object):
             "username": username
         }
 
-        response = self.vayana_client.make_request(
-            auth_url,
-            "OTPREQUEST",
-            payload
-        )
+        try:
+            response = self.vayana_client.make_request(
+                auth_url,
+                "OTPREQUEST",
+                payload
+            )
+        except ReadTimeout as e:
+            raise VayanaAuthException(e)
 
         response_data = response.json()
 
@@ -104,11 +108,14 @@ class Auth(object):
             "otp": self._encrypt_aes(self.__app_key.key, otp)
         }
 
-        response = self.vayana_client.make_request(
-            auth_url,
-            "AUTHTOKEN",
-            payload
-        )
+        try:
+            response = self.vayana_client.make_request(
+                auth_url,
+                "AUTHTOKEN",
+                payload
+            )
+        except ReadTimeout as e:
+            raise VayanaAuthException(e)
 
         response_data = response.json()
 
@@ -135,11 +142,14 @@ class Auth(object):
             "auth_token": self.__authtoken
         }
 
-        response = self.vayana_client.make_request(
-            auth_url,
-            "REFRESHTOKEN",
-            payload
-        )
+        try:
+            response = self.vayana_client.make_request(
+                auth_url,
+                "REFRESHTOKEN",
+                payload
+            )
+        except ReadTimeout as e:
+            raise VayanaAuthException(e)
 
         response_data = response.json()
 

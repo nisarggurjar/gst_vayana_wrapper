@@ -32,4 +32,9 @@ class VayanaRequest(object):
             "txn": token.txn_id
         }
 
-        return requests.post(base_url, headers=headers, json=payload)
+        return requests.post(
+            base_url,
+            headers=headers,
+            json=payload,
+            timeout=5
+        )
