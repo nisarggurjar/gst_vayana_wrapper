@@ -1,5 +1,6 @@
 from vayana_modules.auth import Auth
 from vayana_modules.health import Health
+from vayana_modules.search import Search
 
 
 class VayanaClient(object):
@@ -28,6 +29,16 @@ class VayanaClient(object):
             gst_client_secret,
             gsp_private_key,
             gst_public_key,
-            debug=self.debug
+            **kwargs
         )
+
         self.health = Health(debug=self.debug)
+
+        self.search = Search(
+            gstin,
+            gst_cust_id,
+            gst_client_id,
+            gst_client_secret,
+            gsp_private_key,
+            **kwargs
+        )
