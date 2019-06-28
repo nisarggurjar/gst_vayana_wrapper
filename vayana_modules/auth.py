@@ -1,13 +1,11 @@
-import base64
-from Crypto.Cipher import AES
-from Crypto import Random
+from requests.exceptions import ReadTimeout
 
 from utils.vayana_client_base import VayanaRequest
 from factories.app_key_factory import AppKeyFactory
 from factories.url_factory import GSTURLFactory
+from utils.encryption_utils import AESEncryption
 
 from exceptions import VayanaAuthException
-from requests.exceptions import ReadTimeout
 
 
 class Auth(object):
@@ -62,7 +60,7 @@ class Auth(object):
 
         self.__app_key = app_key_obj
         self.__authtoken = authtoken
-        self.__sek = self._decrypt_sek(sek)
+        self.__sek = AESEncryption.decrypt(self.__app_key.key, sek)
         self.__username = username
 
     def request_otp(self, username):
@@ -105,7 +103,7 @@ class Auth(object):
             "action": "AUTHTOKEN",
             "username": username,
             "app_key": self.__app_key.encrypted_key,
-            "otp": self._encrypt_aes(self.__app_key.key, otp)
+            "otp": AESEncryption.encrypt(self.__app_key.key, otp)
         }
 
         try:
@@ -124,7 +122,10 @@ class Auth(object):
 
         if(response_data['status_cd'] == '1'):
             self.__authtoken = response_data['auth_token']
-            self.__sek = self._decrypt_sek(response_data['sek'])
+            self.__sek = AESEncryption.decrypt(
+                self.__app_key.key,
+                response_data['sek']
+            )
             self.__username = username
 
         return response_data
@@ -133,7 +134,7 @@ class Auth(object):
 
         auth_url = GSTURLFactory.get_url("AUTH", debug=self.debug)
 
-        sek_encrypted_app_key = self._encrypt_aes(self.__sek, self.__app_key.key)
+        sek_encrypted_app_key = AESEncryption.encrypt(self.__sek, self.__app_key.key)
 
         payload = {
             "action": "REFRESHTOKEN",
@@ -158,32 +159,13 @@ class Auth(object):
 
         if(response_data['status_cd'] == '1'):
             self.__authtoken = response_data['auth_token']
-            self.__sek = self._decrypt_sek(response_data['sek'])
+            self.__sek = AESEncryption.decrypt(
+                self.__app_key.key,
+                response_data['sek']
+            )
             self.__username = username
 
         return response_data
-
-    def _encrypt_aes(self, key, encryption_string):
-        cipher = AES.new(key, AES.MODE_ECB)
-
-        padded_string = self._pad(encryption_string)
-        encrypted_string = cipher.encrypt(padded_string)
-        return base64.urlsafe_b64encode(encrypted_string)
-
-    def _pad(self, otp):
-        '''
-        pad the otp with a block size of 16
-        '''
-        bs = 16
-        return otp + (bs - len(otp) % bs) * chr(bs - len(otp) % bs)
-
-    def _unpad(self, decrypted_msg):
-        return decrypted_msg[:-ord(decrypted_msg[len(decrypted_msg)-1:])]
-
-    def _decrypt_sek(self, sek_base64_encoded):
-        cipher = AES.new(self.__app_key.key, AES.MODE_ECB)
-        decrypted = cipher.decrypt(base64.b64decode(sek_base64_encoded))
-        return self._unpad(decrypted)
 
     def authtoken(self):
 
