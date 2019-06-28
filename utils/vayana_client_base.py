@@ -18,7 +18,7 @@ class VayanaRequest(object):
             gsp_private_key
         )
 
-    def make_request(self, base_url, action, payload):
+    def make_request(self, method, base_url, action, payload=None):
         token = self.token_factory.get_token(action)
 
         headers = {
@@ -32,9 +32,18 @@ class VayanaRequest(object):
             "txn": token.txn_id
         }
 
-        return requests.post(
+        if not payload:
+            return requests.request(
+                method,
+                base_url,
+                headers=headers,
+                timeout=5
+            )
+
+        return requests.request(
+            method,
             base_url,
             headers=headers,
-            json=payload,
+            payload=payload,
             timeout=5
         )
