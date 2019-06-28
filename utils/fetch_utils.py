@@ -28,11 +28,13 @@ class DataFetchBase(object):
             gst_cust_id,
             gst_client_id,
             gst_client_secret,
-            gsp_private_key
+            gsp_private_key,
+            ip_usr=kwargs['ip_usr'],
+            state_cd=kwargs['state_cd']
         )
 
     @abstractmethod
-    def fetch(self, GSTIN, **kwargs):
+    def fetch(self, gstin, **kwargs):
         """
         Implement the method to fetch data from GST APIs
         """
