@@ -3,23 +3,25 @@ import json
 
 from factories.url_factory import GSTURLFactory
 from utils.fetch_utils import DataFetchBase
-from transformers.taxpayer_info_transformer import TaxpayerInfoTransformer
 
 from vayana_modules.exceptions import APIException
 
 
-class Search(DataFetchBase):
+class ListReturns(DataFetchBase):
 
-    URL_LABEL = "SEARCH"
-    ACTION = "TP"
+    URL_LABEL = "LIST_RETURNS"
+    ACTION = "RETTRACK"
 
     def fetch(self, gstin, **kwargs):
-        search_url = GSTURLFactory.get_url(Search.URL_LABEL, debug=self.debug)
+        list_returns_url = GSTURLFactory.get_url(ListReturns.URL_LABEL, debug=self.debug)
 
         response = self.vayana_client.make_request(
             "GET",
-            search_url.format(gstin=gstin),
-            Search.ACTION
+            list_returns_url.format(
+                gstin=gstin,
+                fy=kwargs['fy']
+            ),
+            ListReturns.ACTION
         )
 
         if response.status_code != 200 or "error" in response.json():
@@ -34,5 +36,4 @@ class Search(DataFetchBase):
         return json.loads(base64decoded)
 
     def transform(self, data):
-        transformer = TaxpayerInfoTransformer(data)
-        return transformer.transform()
+        return data

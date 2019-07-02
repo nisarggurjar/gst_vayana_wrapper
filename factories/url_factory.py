@@ -6,7 +6,8 @@ class GSTURLFactory(object):
     URL_MAPPINGS = {
         "AUTH": "/taxpayerapi/v1.0/authenticate",
         "HEALTH": "/gstn-health/main",
-        "SEARCH": "/commonapi/v1.1/search?action=TP&gstin={gstin}"
+        "SEARCH": "/commonapi/v1.1/search?action=TP&gstin={gstin}",
+        "LIST_RETURNS": "/commonapi/v1.0/returns?action=RETTRACK&gstin={gstin}&fy={fy}"
     }
 
     @staticmethod
