@@ -20,7 +20,7 @@ class VayanaRequest(object):
             gsp_private_key
         )
 
-    def make_request(self, method, base_url, action, payload=None):
+    def make_request(self, method, base_url, action, payload=None, **kwargs):
         token = self.token_factory.get_token(action)
 
         headers = {
@@ -34,6 +34,9 @@ class VayanaRequest(object):
             "txn": token.txn_id
         }
 
+        if "addon_headers" in kwargs:
+            headers.update(kwargs['addon_headers'])
+
         if not payload:
             return requests.request(
                 method,
@@ -46,6 +49,6 @@ class VayanaRequest(object):
             method,
             base_url,
             headers=headers,
-            payload=payload,
+            json=payload,
             timeout=5
         )

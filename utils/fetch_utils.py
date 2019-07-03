@@ -41,7 +41,7 @@ class DataFetchBase(object):
         return
 
     @abstractmethod
-    def decrypt_and_decode(self, data):
+    def decrypt_and_decode(self, data, **kwargs):
         """
         Implement the method to decrypt and decode from GST APIs
         """
@@ -57,7 +57,7 @@ class DataFetchBase(object):
     def fetch_decode_and_transform(self, GSTIN, **kwargs):
 
         response_data = self.fetch(GSTIN, **kwargs)
-        decrypted_data = self.decrypt_and_decode(response_data)
+        decrypted_data = self.decrypt_and_decode(response_data, **kwargs)
         transformed_data = self.transform(decrypted_data)
 
         return transformed_data
