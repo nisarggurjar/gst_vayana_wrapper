@@ -2,6 +2,7 @@ from vayana_modules.auth import Auth
 from vayana_modules.health import Health
 from vayana_modules.search import Search
 from vayana_modules.list_returns import ListReturns
+from vayana_modules.gstr1 import GSTR1
 
 
 class VayanaClient(object):
@@ -45,6 +46,15 @@ class VayanaClient(object):
         )
 
         self.list_returns = ListReturns(
+            gstin,
+            gst_cust_id,
+            gst_client_id,
+            gst_client_secret,
+            gsp_private_key,
+            **kwargs
+        )
+
+        self.gstr1 = GSTR1(
             gstin,
             gst_cust_id,
             gst_client_id,
