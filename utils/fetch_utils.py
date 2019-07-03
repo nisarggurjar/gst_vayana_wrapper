@@ -48,7 +48,7 @@ class DataFetchBase(object):
         return
 
     @abstractmethod
-    def transform(self, data):
+    def transform(self, data, **kwargs):
         """
         Implement the method to adjust fetched data into a schema
         """
@@ -58,6 +58,6 @@ class DataFetchBase(object):
 
         response_data = self.fetch(GSTIN, **kwargs)
         decrypted_data = self.decrypt_and_decode(response_data, **kwargs)
-        transformed_data = self.transform(decrypted_data)
+        transformed_data = self.transform(decrypted_data, **kwargs)
 
         return transformed_data

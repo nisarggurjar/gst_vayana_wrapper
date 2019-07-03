@@ -8,7 +8,8 @@ class GSTURLFactory(object):
         "HEALTH": "/gstn-health/main",
         "SEARCH": "/commonapi/v1.1/search?action=TP&gstin={gstin}",
         "LIST_RETURNS": "/commonapi/v1.0/returns?action=RETTRACK&gstin={gstin}&fy={fy}",
-        "GSTR1_SUMMARY": "/taxpayerapi/v1.1/returns/gstr1?action=RETSUM&gstin={gstin}&ret_period={ret_period}"
+        "GSTR1": "/taxpayerapi/v1.1/returns/gstr1?action={action}&gstin={gstin}&ret_period={ret_period}",
+        "GSTR4": "/taxpayerapi/v1.1/returns/gstr4?action=RETSUM&gstin={gstin}&ret_period={ret_period}"
     }
 
     @staticmethod

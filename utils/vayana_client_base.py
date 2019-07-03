@@ -23,6 +23,11 @@ class VayanaRequest(object):
     def make_request(self, method, base_url, action, payload=None, **kwargs):
         token = self.token_factory.get_token(action)
 
+        try:
+            timeout = kwargs['timeout']
+        except KeyError:
+            timeout = 5
+
         headers = {
             "Content-Type": "application/json",
             "X-Asp-Auth-Token": str(token),
@@ -42,7 +47,7 @@ class VayanaRequest(object):
                 method,
                 base_url,
                 headers=headers,
-                timeout=5
+                timeout=timeout
             )
 
         return requests.request(
@@ -50,5 +55,5 @@ class VayanaRequest(object):
             base_url,
             headers=headers,
             json=payload,
-            timeout=5
+            timeout=timeout
         )
