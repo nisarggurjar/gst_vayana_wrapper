@@ -80,6 +80,7 @@ class Auth(object):
 
         try:
             response = self.vayana_client.make_request(
+                "POST",
                 auth_url,
                 "OTPREQUEST",
                 payload
@@ -110,6 +111,7 @@ class Auth(object):
 
         try:
             response = self.vayana_client.make_request(
+                "POST",
                 auth_url,
                 "AUTHTOKEN",
                 payload
@@ -147,6 +149,7 @@ class Auth(object):
 
         try:
             response = self.vayana_client.make_request(
+                "POST",
                 auth_url,
                 "REFRESHTOKEN",
                 payload
