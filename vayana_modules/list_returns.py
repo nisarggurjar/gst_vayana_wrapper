@@ -33,10 +33,10 @@ class ListReturns(DataFetchBase):
 
         return response_data['data']
 
-    def decrypt_and_decode(self, data):
+    def decrypt_and_decode(self, data, **kwargs):
         base64decoded = base64.b64decode(data)
         return json.loads(base64decoded)
 
-    def transform(self, data):
+    def transform(self, data, **kwargs):
         transformer = ListReturnsTransformer(data)
         return transformer.transform()
