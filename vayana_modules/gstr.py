@@ -10,25 +10,29 @@ from transformers.gstr1_summary_transformer import GSTR1SummaryTransformer
 from vayana_modules.exceptions import APIException
 
 
-class GSTR1Info(DataFetchBase):
+class GSTRFetch(DataFetchBase):
 
     TRANSFORMER_MAP = {
-        "RETSUM": GSTR1SummaryTransformer,
+        "GSTR1": {
+            "RETSUM": GSTR1SummaryTransformer,
+        }
     }
 
-    URL_LABEL = "GSTR1"
-
     def fetch(self, gstin, **kwargs):
-        gstr1_summary_url = GSTURLFactory.get_url(GSTR1Info.URL_LABEL, debug=self.debug)
+        gstr1_summary_url = GSTURLFactory.get_url(
+            kwargs['return_type'],
+            debug=self.debug
+        )
 
         response = self.vayana_client.make_request(
             "GET",
             gstr1_summary_url.format(
                 gstin=gstin,
                 ret_period=kwargs['ret_period'],
-                action=kwargs['type']
+                action=kwargs['invoice_type'],
+                return_type=kwargs['return_type'].lower()
             ),
-            kwargs['type'],
+            kwargs['invoice_type'],
             addon_headers={
                 "auth-token": kwargs['auth_token'],
                 "ret_period": kwargs['ret_period'],
@@ -53,7 +57,7 @@ class GSTR1Info(DataFetchBase):
     def transform(self, data, **kwargs):
 
         try:
-            transformer = GSTR1Info.TRANSFORMER_MAP[kwargs['type']]
+            transformer = GSTRFetch.TRANSFORMER_MAP[kwargs['return_type']][kwargs['invoice_type']]
         except KeyError:
             return data
 
@@ -61,7 +65,7 @@ class GSTR1Info(DataFetchBase):
         return transformer.transform()
 
 
-class GSTR1(object):
+class GSTR(object):
 
     def __init__(
         self,
@@ -73,7 +77,7 @@ class GSTR1(object):
         **kwargs
     ):
 
-        self.gstr1_info = GSTR1Info(
+        self.gstr_fetch = GSTRFetch(
             gstin,
             gst_cust_id,
             gst_client_id,
