@@ -61,8 +61,8 @@ def get_fy():
 if __name__ == "__main__":
 
     """
-    This script is meant to be run in a cron to refresh token and avoid
-    OTP authentication repeatedly
+    This script is meant to pull all returns data for supplied credentials
+    and push it to mongodb
     """
 
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
