@@ -3,6 +3,8 @@ import json
 
 from factories.url_factory import GSTURLFactory
 from utils.fetch_utils import DataFetchBase
+from transformers.list_returns_transformer import ListReturnsTransformer
+
 
 from vayana_modules.exceptions import APIException
 
@@ -36,4 +38,5 @@ class ListReturns(DataFetchBase):
         return json.loads(base64decoded)
 
     def transform(self, data):
-        return data
+        transformer = ListReturnsTransformer(data)
+        return transformer.transform()
