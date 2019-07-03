@@ -2,7 +2,7 @@ from collections import OrderedDict
 from transformers.transformer_base import TransformerBase
 
 
-class TaxpayerInfoTransformer(TransformerBase):
+class ListReturnsTransformer(TransformerBase):
 
     RENAME_DATA = OrderedDict([
         ("ret_prd", "return_period"),
@@ -12,4 +12,4 @@ class TaxpayerInfoTransformer(TransformerBase):
     ])
 
     def rearrange_transformation(self):
-        return self.data['EFiledlist']
+        self.data = self.data['EFiledlist']
